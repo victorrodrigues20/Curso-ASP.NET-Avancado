@@ -8,9 +8,10 @@ using BibliotecaMVC.Data;
 namespace BibliotecaMVC.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20170808185926_AddUsuarioCategoria")]
+    partial class AddUsuarioCategoria
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
             modelBuilder
                 .HasAnnotation("ProductVersion", "1.0.1")
@@ -92,33 +93,6 @@ namespace BibliotecaMVC.Data.Migrations
                     b.HasKey("LivroID");
 
                     b.ToTable("Livro");
-                });
-
-            modelBuilder.Entity("BibliotecaMVC.Models.Sistema", b =>
-                {
-                    b.Property<int>("SistemaID")
-                        .ValueGeneratedOnAdd();
-
-                    b.Property<string>("Nome");
-
-                    b.HasKey("SistemaID");
-
-                    b.ToTable("Sistema");
-                });
-
-            modelBuilder.Entity("BibliotecaMVC.Models.SistemaUsuario", b =>
-                {
-                    b.Property<int>("SistemaID");
-
-                    b.Property<int>("UsuarioID");
-
-                    b.HasKey("SistemaID", "UsuarioID");
-
-                    b.HasIndex("SistemaID");
-
-                    b.HasIndex("UsuarioID");
-
-                    b.ToTable("SistemaUsuario");
                 });
 
             modelBuilder.Entity("BibliotecaMVC.Models.Usuario", b =>
@@ -245,22 +219,9 @@ namespace BibliotecaMVC.Data.Migrations
                     b.ToTable("AspNetUserTokens");
                 });
 
-            modelBuilder.Entity("BibliotecaMVC.Models.SistemaUsuario", b =>
-                {
-                    b.HasOne("BibliotecaMVC.Models.Sistema", "Sistemas")
-                        .WithMany("SistemaUsuarios")
-                        .HasForeignKey("SistemaID")
-                        .OnDelete(DeleteBehavior.Cascade);
-
-                    b.HasOne("BibliotecaMVC.Models.Usuario", "Usuarios")
-                        .WithMany("SistemaUsuarios")
-                        .HasForeignKey("UsuarioID")
-                        .OnDelete(DeleteBehavior.Cascade);
-                });
-
             modelBuilder.Entity("BibliotecaMVC.Models.Usuario", b =>
                 {
-                    b.HasOne("BibliotecaMVC.Models.Categoria", "Categoria")
+                    b.HasOne("BibliotecaMVC.Models.Categoria", "CategoriaUsuario")
                         .WithMany("Usuarios")
                         .HasForeignKey("CategoriaID");
                 });
