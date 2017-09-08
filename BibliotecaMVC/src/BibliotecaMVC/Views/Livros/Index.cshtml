@@ -1,8 +1,11 @@
 @model IEnumerable<BibliotecaMVC.Models.Livro>
+
 @{
     ViewData["Title"] = "Index";
 }
+
 <h2>Index</h2>
+
 <p>
     <a asp-action="Create">Create New</a>
 </p>
@@ -25,11 +28,23 @@
                 @Html.DisplayNameFor(model => model.Quantidade)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Titulo)
+                <a asp-action="Index" asp-route-ordenacao="@ViewBag.TituloSortParm">@Html.DisplayNameFor(model => model.Titulo)</a>
             </th>
             <th></th>
         </tr>
     </thead>
+
+    @*<thead>
+            <tr>
+                <th>
+                    @Html.DisplayNameFor(model => model.Quantidade)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Titulo)
+                </th>
+                <th></th>
+            </tr>
+        </thead>*@
     <tbody>
         @foreach (var item in Model)
         {

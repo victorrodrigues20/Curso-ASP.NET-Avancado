@@ -20,15 +20,30 @@ namespace BibliotecaMVC.Controllers
         }
 
         // GET: Livros
-        public async Task<IActionResult> Index(string filtroPesquisa)
+        public async Task<IActionResult> Index(string filtroPesquisa, string ordenacao)
         {
+            ViewBag.TituloSortParm = String.IsNullOrEmpty(ordenacao) ? "titulo_desc" : "";
+
             ViewBag.filtroPesquisa = filtroPesquisa;
+
             var livros = from l in _context.Livro
                          select l;
+
             if (!String.IsNullOrEmpty(filtroPesquisa))
             {
                 livros = livros.Where(s => s.Titulo.ToUpper().Contains(filtroPesquisa.ToUpper()));
             }
+
+            switch (ordenacao)
+            {
+                case "titulo_desc":
+                    livros = livros.OrderByDescending(s => s.Titulo);
+                    break;
+                default:
+                    livros = livros.OrderBy(s => s.Titulo);
+                    break;
+            }
+
             return View(await livros.ToListAsync());
         }
 
