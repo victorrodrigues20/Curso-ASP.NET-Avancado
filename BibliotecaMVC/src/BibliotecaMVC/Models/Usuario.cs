@@ -1,5 +1,8 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.Linq;
+using System.Threading.Tasks;
 
 namespace BibliotecaMVC.Models
 {
@@ -8,12 +11,17 @@ namespace BibliotecaMVC.Models
         [Key]
         public int UsuarioID { get; set; }
 
-        [StringLength(100)]
+        [Required]
         public string Nome { get; set; }
 
-        public int? CategoriaID { get; set; }
-        public virtual Categoria Categoria { get; set; }
+        public string Telefone { get; set; }
 
-        public virtual ICollection<SistemaUsuario> SistemaUsuarios { get; set; }
+        [Required]
+        public string Email { get; set; }
+
+        [Required]
+        public string Senha { get; set; }
+
+        public virtual ICollection<Emprestimo> Emprestimo { get; set; }
     }
 }

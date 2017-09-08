@@ -13,8 +13,7 @@
 <form asp-action="Index" method="get">
     <div class="form-actions no-color">
         <p>
-            @Html.DisplayNameFor(model => model.Titulo):&nbsp;
-            <input type="text" name="filtroPesquisa" value="@ViewBag.filtroPesquisa" />
+            @Html.DisplayNameFor(model => model.Titulo):&nbsp;<input type="text" name="filtroPesquisa" value="@ViewBag.filtroPesquisa" />
             <input type="submit" value="Pesquisar" class="btn btn-default" /> |
             <a asp-action="Index">Limpar</a>
         </p>
@@ -33,34 +32,21 @@
             <th></th>
         </tr>
     </thead>
-
-    @*<thead>
-            <tr>
-                <th>
-                    @Html.DisplayNameFor(model => model.Quantidade)
-                </th>
-                <th>
-                    @Html.DisplayNameFor(model => model.Titulo)
-                </th>
-                <th></th>
-            </tr>
-        </thead>*@
     <tbody>
-        @foreach (var item in Model)
-        {
-            <tr>
-                <td>
-                    @Html.DisplayFor(modelItem => item.Quantidade)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.Titulo)
-                </td>
-                <td>
-                    <a asp-action="Edit" asp-route-id="@item.LivroID">Edit</a> |
-                    <a asp-action="Details" asp-route-id="@item.LivroID">Details</a> |
-                    <a asp-action="Delete" asp-route-id="@item.LivroID">Delete</a>
-                </td>
-            </tr>
-        }
+@foreach (var item in Model) {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.Quantidade)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Titulo)
+            </td>
+            <td>
+                <a asp-action="Edit" asp-route-id="@item.LivroID">Edit</a> |
+                <a asp-action="Details" asp-route-id="@item.LivroID">Details</a> |
+                <a asp-action="Delete" asp-route-id="@item.LivroID">Delete</a>
+            </td>
+        </tr>
+}
     </tbody>
 </table>

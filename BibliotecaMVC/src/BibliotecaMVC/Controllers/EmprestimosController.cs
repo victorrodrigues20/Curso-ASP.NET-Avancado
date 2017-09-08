@@ -10,22 +10,23 @@ using BibliotecaMVC.Models;
 
 namespace BibliotecaMVC.Controllers
 {
-    public class SistemasController : Controller
+    public class EmprestimosController : Controller
     {
         private readonly ApplicationDbContext _context;
 
-        public SistemasController(ApplicationDbContext context)
+        public EmprestimosController(ApplicationDbContext context)
         {
             _context = context;    
         }
 
-        // GET: Sistemas
+        // GET: Emprestimos
         public async Task<IActionResult> Index()
         {
-            return View(await _context.Sistema.ToListAsync());
+            var applicationDbContext = _context.Emprestimo.Include(e => e.Usuario);
+            return View(await applicationDbContext.ToListAsync());
         }
 
-        // GET: Sistemas/Details/5
+        // GET: Emprestimos/Details/5
         public async Task<IActionResult> Details(int? id)
         {
             if (id == null)
@@ -33,38 +34,40 @@ namespace BibliotecaMVC.Controllers
                 return NotFound();
             }
 
-            var sistema = await _context.Sistema.SingleOrDefaultAsync(m => m.SistemaID == id);
-            if (sistema == null)
+            var emprestimo = await _context.Emprestimo.SingleOrDefaultAsync(m => m.EmprestimoID == id);
+            if (emprestimo == null)
             {
                 return NotFound();
             }
 
-            return View(sistema);
+            return View(emprestimo);
         }
 
-        // GET: Sistemas/Create
+        // GET: Emprestimos/Create
         public IActionResult Create()
         {
+            ViewData["UsuarioID"] = new SelectList(_context.Usuario, "UsuarioID", "Email");
             return View();
         }
 
-        // POST: Sistemas/Create
+        // POST: Emprestimos/Create
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("SistemaID,Nome")] Sistema sistema)
+        public async Task<IActionResult> Create([Bind("EmprestimoID,DataDevolucao,DataFim,DataInicio,UsuarioID")] Emprestimo emprestimo)
         {
             if (ModelState.IsValid)
             {
-                _context.Add(sistema);
+                _context.Add(emprestimo);
                 await _context.SaveChangesAsync();
                 return RedirectToAction("Index");
             }
-            return View(sistema);
+            ViewData["UsuarioID"] = new SelectList(_context.Usuario, "UsuarioID", "Email", emprestimo.UsuarioID);
+            return View(emprestimo);
         }
 
-        // GET: Sistemas/Edit/5
+        // GET: Emprestimos/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null)
@@ -72,22 +75,23 @@ namespace BibliotecaMVC.Controllers
                 return NotFound();
             }
 
-            var sistema = await _context.Sistema.SingleOrDefaultAsync(m => m.SistemaID == id);
-            if (sistema == null)
+            var emprestimo = await _context.Emprestimo.SingleOrDefaultAsync(m => m.EmprestimoID == id);
+            if (emprestimo == null)
             {
                 return NotFound();
             }
-            return View(sistema);
+            ViewData["UsuarioID"] = new SelectList(_context.Usuario, "UsuarioID", "Email", emprestimo.UsuarioID);
+            return View(emprestimo);
         }
 
-        // POST: Sistemas/Edit/5
+        // POST: Emprestimos/Edit/5
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("SistemaID,Nome")] Sistema sistema)
+        public async Task<IActionResult> Edit(int id, [Bind("EmprestimoID,DataDevolucao,DataFim,DataInicio,UsuarioID")] Emprestimo emprestimo)
         {
-            if (id != sistema.SistemaID)
+            if (id != emprestimo.EmprestimoID)
             {
                 return NotFound();
             }
@@ -96,12 +100,12 @@ namespace BibliotecaMVC.Controllers
             {
                 try
                 {
-                    _context.Update(sistema);
+                    _context.Update(emprestimo);
                     await _context.SaveChangesAsync();
                 }
                 catch (DbUpdateConcurrencyException)
                 {
-                    if (!SistemaExists(sistema.SistemaID))
+                    if (!EmprestimoExists(emprestimo.EmprestimoID))
                     {
                         return NotFound();
                     }
@@ -112,10 +116,11 @@ namespace BibliotecaMVC.Controllers
                 }
                 return RedirectToAction("Index");
             }
-            return View(sistema);
+            ViewData["UsuarioID"] = new SelectList(_context.Usuario, "UsuarioID", "Email", emprestimo.UsuarioID);
+            return View(emprestimo);
         }
 
-        // GET: Sistemas/Delete/5
+        // GET: Emprestimos/Delete/5
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null)
@@ -123,29 +128,29 @@ namespace BibliotecaMVC.Controllers
                 return NotFound();
             }
 
-            var sistema = await _context.Sistema.SingleOrDefaultAsync(m => m.SistemaID == id);
-            if (sistema == null)
+            var emprestimo = await _context.Emprestimo.SingleOrDefaultAsync(m => m.EmprestimoID == id);
+            if (emprestimo == null)
             {
                 return NotFound();
             }
 
-            return View(sistema);
+            return View(emprestimo);
         }
 
-        // POST: Sistemas/Delete/5
+        // POST: Emprestimos/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            var sistema = await _context.Sistema.SingleOrDefaultAsync(m => m.SistemaID == id);
-            _context.Sistema.Remove(sistema);
+            var emprestimo = await _context.Emprestimo.SingleOrDefaultAsync(m => m.EmprestimoID == id);
+            _context.Emprestimo.Remove(emprestimo);
             await _context.SaveChangesAsync();
             return RedirectToAction("Index");
         }
 
-        private bool SistemaExists(int id)
+        private bool EmprestimoExists(int id)
         {
-            return _context.Sistema.Any(e => e.SistemaID == id);
+            return _context.Emprestimo.Any(e => e.EmprestimoID == id);
         }
     }
 }

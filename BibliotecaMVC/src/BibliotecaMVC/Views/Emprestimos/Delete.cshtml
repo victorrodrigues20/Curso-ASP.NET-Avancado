@@ -1,4 +1,4 @@
-@model BibliotecaMVC.Models.Livro
+@model BibliotecaMVC.Models.Emprestimo
 
 @{
     ViewData["Title"] = "Delete";
@@ -8,26 +8,26 @@
 
 <h3>Are you sure you want to delete this?</h3>
 <div>
-    <h4>Livro</h4>
+    <h4>Emprestimo</h4>
     <hr />
     <dl class="dl-horizontal">
         <dt>
-            @Html.DisplayNameFor(model => model.Foto)
+            @Html.DisplayNameFor(model => model.DataDevolucao)
         </dt>
         <dd>
-            @Html.DisplayFor(model => model.Foto)
+            @Html.DisplayFor(model => model.DataDevolucao)
         </dd>
         <dt>
-            @Html.DisplayNameFor(model => model.Quantidade)
+            @Html.DisplayNameFor(model => model.DataFim)
         </dt>
         <dd>
-            @Html.DisplayFor(model => model.Quantidade)
+            @Html.DisplayFor(model => model.DataFim)
         </dd>
         <dt>
-            @Html.DisplayNameFor(model => model.Titulo)
+            @Html.DisplayNameFor(model => model.DataInicio)
         </dt>
         <dd>
-            @Html.DisplayFor(model => model.Titulo)
+            @Html.DisplayFor(model => model.DataInicio)
         </dd>
     </dl>
     
