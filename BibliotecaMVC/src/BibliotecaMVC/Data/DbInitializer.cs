@@ -32,6 +32,22 @@ namespace BibliotecaMVC.Data
                 context.Livro.Add(l);
             }
 
+            var autores = new Autor[]
+            {
+                new Autor { Nome = "Sérgio de Oliveira" },
+                new Autor { Nome = "Renato da Silva"},
+                new Autor { Nome = "Paulo Sérgio Travolla"},
+                new Autor { Nome = "Juliano Niederauer"},
+                new Autor { Nome = "Roberto Cohen"},
+                new Autor { Nome = "Chris McNab"},
+                new Autor { Nome = "Luiz Fernando Estevarengo"}
+            };
+
+            foreach (Autor a in autores)
+            {
+                context.Autor.Add(a);
+            }
+
             context.SaveChanges();
         }
     }

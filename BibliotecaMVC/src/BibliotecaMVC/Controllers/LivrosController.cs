@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using BibliotecaMVC.Data;
 using BibliotecaMVC.Models;
+using BibliotecaMVC.Utils;
 
 namespace BibliotecaMVC.Controllers
 {
@@ -55,7 +56,11 @@ namespace BibliotecaMVC.Controllers
                 return NotFound();
             }
 
-            var livro = await _context.Livro.SingleOrDefaultAsync(m => m.LivroID == id);
+            var livro = await _context.Livro.AsNoTracking()
+                              .Include(l => l.LivroAutor)
+                              .ThenInclude(li => li.Autor)
+                              .SingleOrDefaultAsync(m => m.LivroID == id);
+
             if (livro == null)
             {
                 return NotFound();
@@ -67,7 +72,9 @@ namespace BibliotecaMVC.Controllers
         // GET: Livros/Create
         public IActionResult Create()
         {
-            return View();
+            ViewBag.Autores = new Listagens(_context).AutoresCheckBox();
+
+            return View(new Livro());
         }
 
         // POST: Livros/Create
@@ -75,10 +82,18 @@ namespace BibliotecaMVC.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("LivroID,Foto,Quantidade,Titulo")] Livro livro)
+        public async Task<IActionResult> Create([Bind("LivroID,Foto,Quantidade,Titulo,AutorUnico")] Livro livro, string[] selectedAutores)
         {
             if (ModelState.IsValid)
             {
+                if (selectedAutores != null)
+                {
+                    livro.LivroAutor = new List<LivroAutor>();
+
+                    foreach (var idAutor in selectedAutores)
+                        livro.LivroAutor.Add(new LivroAutor() { AutorID = int.Parse(idAutor), Livro = livro });
+                }
+
                 _context.Add(livro);
                 await _context.SaveChangesAsync();
                 return RedirectToAction("Index");
@@ -94,11 +109,22 @@ namespace BibliotecaMVC.Controllers
                 return NotFound();
             }
 
-            var livro = await _context.Livro.SingleOrDefaultAsync(m => m.LivroID == id);
+            var autoresAux = new Listagens(_context).AutoresCheckBox();
+
+            var livro = await _context.Livro.Include(l => l.LivroAutor)
+                .SingleOrDefaultAsync(m => m.LivroID == id);
+
+            autoresAux.ForEach(a => 
+                                    a.Checked = livro.LivroAutor.Any(l => l.AutorID == a.Value)
+                              );
+
+            ViewBag.Autores = autoresAux;
+
             if (livro == null)
             {
                 return NotFound();
             }
+
             return View(livro);
         }
 
@@ -107,7 +133,7 @@ namespace BibliotecaMVC.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("LivroID,Foto,Quantidade,Titulo")] Livro livro)
+        public async Task<IActionResult> Edit(int id, [Bind("LivroID,Foto,Quantidade,Titulo")] Livro livro, string[] selectedAutores)
         {
             if (id != livro.LivroID)
             {
@@ -118,6 +144,19 @@ namespace BibliotecaMVC.Controllers
             {
                 try
                 {
+                    var livroAutores = _context.LivroAutor.AsNoTracking().Where(la => la.LivroID == livro.LivroID);
+
+                    _context.LivroAutor.RemoveRange(livroAutores);
+                    await _context.SaveChangesAsync();
+
+                    if (selectedAutores != null)
+                    {
+                        livro.LivroAutor = new List<LivroAutor>();
+
+                        foreach (var idAutor in selectedAutores)
+                            livro.LivroAutor.Add(new LivroAutor() { AutorID = int.Parse(idAutor), Livro = livro });
+                    }
+
                     _context.Update(livro);
                     await _context.SaveChangesAsync();
                 }

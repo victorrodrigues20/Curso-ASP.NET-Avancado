@@ -55,5 +55,9 @@ namespace BibliotecaMVC.Data
         public DbSet<Usuario> Usuario { get; set; }
 
         public DbSet<Emprestimo> Emprestimo { get; set; }
+
+        public DbSet<LivroAutor> LivroAutor { get; set; }
+
+        public DbSet<Autor> Autor { get; set; }
     }
 }
