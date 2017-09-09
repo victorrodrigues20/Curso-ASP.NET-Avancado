@@ -1,0 +1,24 @@
+﻿@model IEnumerable<BibliotecaMVC.Models.Livro>
+
+@{
+    Layout = null;
+}
+
+<div class="row">
+    @foreach (var item in Model)
+    {
+        <div class="col-md-4">
+            <div class="card" style="width: 20rem;">
+                <img class="card-img-top" src="~/Imagens/Produtos/@item.Foto">
+                <div class="card-block">
+                    <h4 class="card-title">@item.Titulo</h4>
+                    <p class="card-text">
+                        Quantidade: @item.Quantidade
+                    </p>
+                    <a asp-area="" asp-controller="Carrinho" asp-action="Adicionar" 
+                       asp-route-id="@item.LivroID" class="btn btn-primary">Add ao Carrinho</a>
+                </div>
+            </div>
+        </div>
+    }
+</div>

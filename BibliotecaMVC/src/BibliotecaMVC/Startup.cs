@@ -48,6 +48,8 @@ namespace BibliotecaMVC
                 .AddDefaultTokenProviders();
 
             services.AddMvc();
+            services.AddDistributedMemoryCache();
+            services.AddSession();
 
             // Add application services.
             services.AddTransient<IEmailSender, AuthMessageSender>();
@@ -73,6 +75,8 @@ namespace BibliotecaMVC
             }
 
             app.UseStaticFiles();
+
+            app.UseSession();
 
             app.UseIdentity();
 
