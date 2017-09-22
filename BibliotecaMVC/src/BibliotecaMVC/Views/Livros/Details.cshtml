@@ -11,12 +11,6 @@
     <hr />
     <dl class="dl-horizontal">
         <dt>
-            @Html.DisplayNameFor(model => model.Foto)
-        </dt>
-        <dd>
-            @Html.DisplayFor(model => model.Foto)
-        </dd>
-        <dt>
             @Html.DisplayNameFor(model => model.Quantidade)
         </dt>
         <dd>
@@ -27,6 +21,12 @@
         </dt>
         <dd>
             @Html.DisplayFor(model => model.Titulo)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.Foto)
+        </dt>
+        <dd>
+            <img src="~/@Model.Foto" alt="Exemplo Foto" />
         </dd>
     </dl>
     <dl class="dl-horizontal">

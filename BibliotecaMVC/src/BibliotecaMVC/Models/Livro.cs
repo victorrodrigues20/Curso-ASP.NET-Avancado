@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.AspNetCore.Http;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
@@ -25,5 +26,11 @@ namespace BibliotecaMVC.Models
         public ICollection<LivroAutor> LivroAutor { get; set; }
 
         public ICollection<LivroEmprestimo> LivroEmprestimo { get; set; }
+
+        [NotMapped]
+        public IFormFile FotoFile { get; set; }
+
+        //[DataType(DataType.Upload)]
+        //HttpPostedFileBase ImageUpload { get; set; }
     }
 }

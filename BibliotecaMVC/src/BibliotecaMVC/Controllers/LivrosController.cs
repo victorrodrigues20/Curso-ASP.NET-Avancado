@@ -1,23 +1,27 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Rendering;
-using Microsoft.EntityFrameworkCore;
 using BibliotecaMVC.Data;
 using BibliotecaMVC.Models;
 using BibliotecaMVC.Utils;
+using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
+using System;
+using System.Collections.Generic;
+using System.IO;
+using System.Linq;
+using System.Threading.Tasks;
 
 namespace BibliotecaMVC.Controllers
 {
     public class LivrosController : Controller
     {
         private readonly ApplicationDbContext _context;
+        private IHostingEnvironment _hostingEnvironment;
 
-        public LivrosController(ApplicationDbContext context)
+        public LivrosController(ApplicationDbContext context, IHostingEnvironment environment)
         {
-            _context = context;    
+            _context = context;
+            _hostingEnvironment = environment;
         }
 
         // GET: Livros
@@ -82,7 +86,7 @@ namespace BibliotecaMVC.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("LivroID,Foto,Quantidade,Titulo,AutorUnico")] Livro livro, string[] selectedAutores)
+        public async Task<IActionResult> Create([Bind("LivroID,Foto,Quantidade,Titulo,AutorUnico")] Livro livro, string[] selectedAutores, List<IFormFile> files)
         {
             if (ModelState.IsValid)
             {
@@ -96,6 +100,10 @@ namespace BibliotecaMVC.Controllers
 
                 _context.Add(livro);
                 await _context.SaveChangesAsync();
+
+                livro.Foto = await RealizarUploadImagens(files, livro.LivroID);
+                await _context.SaveChangesAsync();
+
                 return RedirectToAction("Index");
             }
             return View(livro);
@@ -114,7 +122,7 @@ namespace BibliotecaMVC.Controllers
             var livro = await _context.Livro.Include(l => l.LivroAutor)
                 .SingleOrDefaultAsync(m => m.LivroID == id);
 
-            autoresAux.ForEach(a => 
+            autoresAux.ForEach(a =>
                                     a.Checked = livro.LivroAutor.Any(l => l.AutorID == a.Value)
                               );
 
@@ -133,7 +141,7 @@ namespace BibliotecaMVC.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("LivroID,Foto,Quantidade,Titulo")] Livro livro, string[] selectedAutores)
+        public async Task<IActionResult> Edit(int id, [Bind("LivroID,Foto,Quantidade,Titulo")] Livro livro, string[] selectedAutores, List<IFormFile> files)
         {
             if (id != livro.LivroID)
             {
@@ -156,6 +164,8 @@ namespace BibliotecaMVC.Controllers
                         foreach (var idAutor in selectedAutores)
                             livro.LivroAutor.Add(new LivroAutor() { AutorID = int.Parse(idAutor), Livro = livro });
                     }
+
+                    livro.Foto = await RealizarUploadImagens(files, livro.LivroID);
 
                     _context.Update(livro);
                     await _context.SaveChangesAsync();
@@ -207,6 +217,45 @@ namespace BibliotecaMVC.Controllers
         private bool LivroExists(int id)
         {
             return _context.Livro.Any(e => e.LivroID == id);
+        }
+
+        private async Task<string> RealizarUploadImagens(List<IFormFile> files, int idLivro)
+        {
+            // Verifica se existem arquivos selecionados
+            if (files.Count > 0)
+            {
+                // Variável para armazenar o caminho de upload das imagens
+                var pathUpload = Path.Combine(_hostingEnvironment.WebRootPath, "uploads");
+
+                // Se o caminho não existe então cria
+                if (!Directory.Exists(pathUpload))
+                    Directory.CreateDirectory(pathUpload);
+
+                // Para cada arquivo faça
+                foreach (var file in files)
+                {
+                    // Verifica se o arquivo possui informação
+                    if (file.Length > 0)
+                    {
+                        // Concatena o nome do arquivo
+                        var nomeArquivo = "livro_" + idLivro + Path.GetExtension(file.FileName);
+                        // Concatena o caminho do arquivo
+                        var pathFile = Path.Combine(pathUpload, nomeArquivo);
+
+                        // Realiza a cópia
+                        using (var fileStream = new FileStream(pathFile, FileMode.Create))
+                        {
+                            await file.CopyToAsync(fileStream);
+                        }
+
+                        // Retorna o caminho do arquivo que será salvo
+                        // no banco de dados
+                        return "uploads//" + Path.GetFileName(pathFile);
+                    }
+                }
+            }
+
+            return null;
         }
 
     }
