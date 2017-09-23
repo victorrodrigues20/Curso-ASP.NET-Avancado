@@ -43,12 +43,22 @@ namespace BibliotecaMVC.Data
                 new Autor { Nome = "Luiz Fernando Estevarengo"}
             };
 
-            foreach (Autor a in autores)
-            {
-                context.Autor.Add(a);
-            }
+    foreach (Autor a in autores)
+    {
+        context.Autor.Add(a);
+    }
 
-            context.SaveChanges();
-        }
+    var usuarios = new Usuario[]
+    {
+        new Usuario { Nome = "Teste", Email = "teste@teste.com", Senha = "abc123" }
+    };
+
+    foreach (Usuario a in usuarios)
+    {
+        context.Usuario.Add(a);
+    }
+
+    context.SaveChanges();
+}
     }
 }

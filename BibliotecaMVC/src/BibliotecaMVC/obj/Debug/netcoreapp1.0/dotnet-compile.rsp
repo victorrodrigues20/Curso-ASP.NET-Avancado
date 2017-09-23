@@ -248,6 +248,8 @@ D:\GitHub\Curso ASP.NET Avançado\Curso-ASP.NET-Avancado\BibliotecaMVC\src\Bibli
 D:\GitHub\Curso ASP.NET Avançado\Curso-ASP.NET-Avancado\BibliotecaMVC\src\BibliotecaMVC\Data\Migrations\20170811192247_ManyToMany.Designer.cs
 D:\GitHub\Curso ASP.NET Avançado\Curso-ASP.NET-Avancado\BibliotecaMVC\src\BibliotecaMVC\Data\Migrations\20170908165111_BancoDadosProjeto.cs
 D:\GitHub\Curso ASP.NET Avançado\Curso-ASP.NET-Avancado\BibliotecaMVC\src\BibliotecaMVC\Data\Migrations\20170908165111_BancoDadosProjeto.Designer.cs
+D:\GitHub\Curso ASP.NET Avançado\Curso-ASP.NET-Avancado\BibliotecaMVC\src\BibliotecaMVC\Data\Migrations\20170923052357_AddCampoUsuario.cs
+D:\GitHub\Curso ASP.NET Avançado\Curso-ASP.NET-Avancado\BibliotecaMVC\src\BibliotecaMVC\Data\Migrations\20170923052357_AddCampoUsuario.Designer.cs
 D:\GitHub\Curso ASP.NET Avançado\Curso-ASP.NET-Avancado\BibliotecaMVC\src\BibliotecaMVC\Data\Migrations\ApplicationDbContextModelSnapshot.cs
 D:\GitHub\Curso ASP.NET Avançado\Curso-ASP.NET-Avancado\BibliotecaMVC\src\BibliotecaMVC\Models\ApplicationUser.cs
 D:\GitHub\Curso ASP.NET Avançado\Curso-ASP.NET-Avancado\BibliotecaMVC\src\BibliotecaMVC\Models\Autor.cs
